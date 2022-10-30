@@ -1,6 +1,7 @@
 @import url(./vendor/normalize.css);
 @import url(./vendor/fonts/fonts__inter/fonts__inter.css);
 @import url(./blocks/page/page.css);
+@import url(./blocks/page/__background/page__background.css);
 @import url(./blocks/elements/elements.css);
 @import url(./blocks/card/card.css);
 @import url(./blocks/card/__image/card__image.css);

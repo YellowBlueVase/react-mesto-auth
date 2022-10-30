@@ -1,14 +1,7 @@
 import React from 'react';
 
 function ImagePopup(props) {
-
-    React.useEffect(() => {
-        document.addEventListener('keydown', (e) => {if (e.key === "Escape") {props.onClose()}}); 
-
-        return () => {
-            document.removeEventListener('keydown', (e) => {if (e.key === "Escape") {props.onClose()}}); 
-        }})
-
+    
     return(
         <div className={`popup popup_type_large-image ${props.card && 'popup_opened'}`} tabIndex="-1">
             <div className="popup__container">

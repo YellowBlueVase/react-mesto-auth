@@ -10,10 +10,20 @@ class Api {
 
     _getResponseData(url, res) {
       if (res.ok) {
-        // console.log(`Статус получения профиля - ${res.status}`)
         return res.json()}
       return Promise.reject(`Ошибка по адресу ${url}, статус ошибки ${res.status}`)
     }
+
+    // _request(url, options) {
+    //   return fetch(url, options).then((res) => {return this._getResponseData(url, res)})
+    // }
+
+    // getProfileInfo() {
+    //   this._request(this._urlProfile, {
+    //     method: 'GET',
+    //     headers: this._headers
+    //     })
+    // }
 
     getProfileInfo() {
       return fetch(this._urlProfile, {
@@ -31,7 +41,7 @@ class Api {
         headers: this._headers
         })
       .then((res) => {
-          this._getResponseData(`${this._urlCards}${cardId}`, res)
+          return this._getResponseData(`${this._urlCards}${cardId}`, res)
         })
     }
     
