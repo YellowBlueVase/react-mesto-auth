@@ -6,7 +6,7 @@ function Card(props) {
   }
 
   return (
-    <div className="card" key={props.card._id}>
+    <div className="card">
       <img
         src={props.card.link}
         className="card__image"

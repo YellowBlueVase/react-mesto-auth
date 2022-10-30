@@ -9,6 +9,7 @@
 }
 
 .profile__avatar-hover {
+    
     cursor: pointer;
     position: absolute;
     border: 0;
@@ -30,25 +31,27 @@
     border-radius: 100%;
     overflow: hidden;
     object-fit: cover;
+    
+}
+
+.profile__avatar-icon {
+    width: 26px;
+    height: 26px;
+    border: 0;
+    background-image: url("../../../images/avatar-hover.svg");
+    background-repeat:no-repeat;
 }
 
 .profile__avatar:hover .profile__avatar-hover {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     opacity: 0.8;
     border: 0;
     border-radius: 100%;
 }
 
 .profile__avatar_hover .profile__avatar-icon {
-	color: white;
-    font-size: 100px;
-    position: absolute;
-    border: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    text-align: center;
 } 
 
 @media all and (max-width: 1280px) {

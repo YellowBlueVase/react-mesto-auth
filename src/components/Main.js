@@ -19,7 +19,7 @@ function Main(props) {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
 
   React.useEffect(() => {
     api
@@ -30,7 +30,7 @@ function Main(props) {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
 
   return (
     <main>
@@ -47,11 +47,7 @@ function Main(props) {
             name="edit-avatar"
             className="profile__avatar-hover"
           >
-            <img
-              src="../images/avatar-hover.svg"
-              className="profile__avatar-icon"
-              alt={`Иконка наведения на аватар ${userName}`}
-            />
+            <div className="profile__avatar-icon" />
           </button>
         </div>
         <div className="profile__info">
