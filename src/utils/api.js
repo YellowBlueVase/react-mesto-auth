@@ -59,7 +59,10 @@ class Api {
       return fetch(this._urlProfile, {
         method: 'PATCH',
         headers: this._headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          name:data.name,
+          about:data.about
+        })
         })
         .then(res => {
           return this._getResponseData(this._urlProfile, res)
@@ -70,7 +73,12 @@ class Api {
       return fetch(this._urlCards, {
         method: 'POST',
         headers: this._headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          name: data.name,
+          link: data.link,
+          likes: data.likes,
+          owner: data.owner
+        })
         })
       .then((res) => {
           return this._getResponseData(this._urlCards, res)
@@ -96,6 +104,16 @@ class Api {
           return this._getResponseData(`${this._urlCards}${cardId}/likes`, res)
         })
     }
+    
+    deleteLike(cardId) {
+      return fetch(`${this._urlCards}${cardId}/likes`, {
+        method: 'DELETE',
+        headers: this._headers,
+        })
+        .then((res) => {
+          return this._getResponseData(`${this._urlCards}${cardId}/likes`, res)
+        })
+    }
 
     showLikes(cardId) {
       return fetch(`${this._urlCards}${cardId}/likes`, {
@@ -107,21 +125,13 @@ class Api {
         })
     }
 
-    deleteLike(cardId) {
-      return fetch(`${this._urlCards}${cardId}/likes`, {
-        method: 'DELETE',
-        headers: this._headers,
-        })
-        .then((res) => {
-          return this._getResponseData(`${this._urlCards}${cardId}/likes`, res)
-        })
-    }
-
     updateAvatar(data) {
       return fetch(`${this._urlProfile}avatar`, {
         method: 'PATCH',
         headers: this._headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          avatar:data
+        })
         })
         .then(res => {
           return this._getResponseData(this._urlProfile, res)
