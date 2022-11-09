@@ -12,7 +12,7 @@ import React from "react";
 import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
-  const [currentUser, setCurrentUser] = React.useState();
+  const [currentUser, setCurrentUser] = React.useState([]);
   const [cards, setCards] = React.useState([]);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -42,7 +42,10 @@ function App() {
 
   function handleCardDelete(card) {
     api.deleteCard(card._id)
-    setCards(current => current.filter(item => {return item._id !== card._id}))
+    .then(() => {
+      setCards(current => current.filter(item => {return item._id !== card._id}))
+    })
+    .catch((err) => {console.log(err)})
   }
 
   function handleAddPlaceSubmit(props) {
@@ -54,19 +57,28 @@ function App() {
       _id: Math.random()
     }
     api.addNewCard(newCard)
-    setCards([newCard, ...cards]); 
+    .then(() => {
+      setCards([newCard, ...cards]);
+    })
+    .catch((err) => {console.log(err)})
   }
   
   function handleUpdateUser(props) {
     api.updateProfile(props)
-    setCurrentUser({...currentUser, name: props.name, about: props.about})
-    closeAllPopups()
+    .then(() => {
+      setCurrentUser({...currentUser, name: props.name, about: props.about})
+      closeAllPopups()
+    })
+    .catch((err) => {console.log(err)})
   }
 
   function handleUpdateAvatar(props) {
     api.updateAvatar(props.avatar)
-    setCurrentUser({...currentUser, avatar: props.avatar})
-    closeAllPopups()
+    .then(() => {
+      setCurrentUser({...currentUser, avatar: props.avatar})
+      closeAllPopups()
+    })
+    .catch((err) => {console.log(err)})
   }
 
   function handleEditAvatarClick() {
@@ -139,10 +151,10 @@ function App() {
           cards={cards}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
+          onCardClick={handleCardClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
         />
         <EditProfilePopup 
           isOpen={isEditProfilePopupOpen} 

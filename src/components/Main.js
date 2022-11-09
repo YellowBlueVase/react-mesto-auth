@@ -2,7 +2,7 @@ import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Card from "./Card.js";
 
-function Main(props) {
+function Main({onEditProfile, onEditAvatar, onAddPlace, cards, onCardClick, onCardLike, onCardDelete}) {
 
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -17,7 +17,7 @@ function Main(props) {
           />
           <button
             type="button"
-            onClick={props.onEditAvatar}
+            onClick={onEditAvatar}
             name="edit-avatar"
             className="profile__avatar-hover"
           >
@@ -28,7 +28,7 @@ function Main(props) {
           <h1 className="profile__name">{currentUser?.name}</h1>
           <button
             type="button"
-            onClick={props.onEditProfile}
+            onClick={onEditProfile}
             name="edit-button"
             className="profile__edit-button"
           ></button>
@@ -36,20 +36,20 @@ function Main(props) {
         </div>
         <button
           type="button"
-          onClick={props.onAddPlace}
+          onClick={onAddPlace}
           name="add-button"
           className="profile__add-button"
         ></button>
       </section>
       <section className="elements">
-        {props.cards.map((card) => {
+        {cards.map((card) => {
           return (
             <Card 
               key={card._id} 
               card={card} 
-              onCardClick={props.onCardClick}
-              onCardLike={props.onCardLike}
-              onCardDelete={props.onCardDelete}/>
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}/>
           );
         })}
       </section>

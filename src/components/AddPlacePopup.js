@@ -1,21 +1,20 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddPlacePopup(props) {
-    const isOpen = props.isOpen;
-    const onClose = props.onClose;
-    const onAddPlaceSubmit = props.onAddPlaceSubmit;
-
-    const nameRef = React.useRef();
-    const linkRef = React.useRef();
+function AddPlacePopup({isOpen, onClose, onAddPlaceSubmit}) {
+    const nameRef = React.useRef('');
+    const linkRef = React.useRef('');
 
     function handleSubmit(e) {
         e.preventDefault();
         onAddPlaceSubmit({name:nameRef.current.value, link:linkRef.current.value});
         onClose();
+    }
+
+    React.useEffect(() => {
         nameRef.current.value ='';
         linkRef.current.value ='';
-    }
+    }, [])
 
     return (
         <PopupWithForm
