@@ -8,7 +8,7 @@ function Header({ userProfile, loggedIn, setLoggedIn }) {
   function signOut(){
     localStorage.removeItem('jwt');
     history.push('/signin');
-    setLoggedIn(!loggedIn)
+    setLoggedIn(false)
   }
 
   return (
@@ -17,7 +17,6 @@ function Header({ userProfile, loggedIn, setLoggedIn }) {
       <div className="header__profile-box">
         {loggedIn && <div className="header__user-profile">{userProfile}</div>}
         <div
-          // onClick={handleClick}
           className={`header__button ${
             loggedIn ? "header__button_gray" : "header__button_white"
           }`}

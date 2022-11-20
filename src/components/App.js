@@ -14,7 +14,7 @@ import Register from "./Register";
 import {CurrentUserContext} from "../contexts/CurrentUserContext.js";
 import {InfoToolTip} from "./InfoToolTip.js";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, withRouter } from 'react-router-dom';
 import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
@@ -264,4 +264,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);
