@@ -1,7 +1,8 @@
 .header__logo {
     width: 142px;
     height: 33px;
-    margin: 0 0 41px 0;
+    margin: 0;
+    margin-bottom: 41px;
     background-image: url('../../../images/mesto-russia.svg');
     background-size:cover;
     padding: 0;

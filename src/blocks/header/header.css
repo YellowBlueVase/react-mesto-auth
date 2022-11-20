@@ -1,6 +1,9 @@
 .header {
     display: flex;
-    margin: 45px 200px 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 45px 200px 0px;
     max-width: 100%;
     min-width: 320px;
     border-bottom: 1px solid rgb(84, 84, 84, 0.7);
