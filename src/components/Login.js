@@ -1,13 +1,11 @@
-import React from 'react';
-import { BASE_URL } from '../utils/constants';
-import { withRouter, useHistory } from 'react-router-dom';
+import {useState} from 'react';
+import { withRouter } from 'react-router-dom';
 
-const Login = ({handleLoggedInChange, handleRegister}) => {
-    const [inputData, setInputData] = React.useState({
+const Login = ({onLogin}) => {
+    const [inputData, setInputData] = useState({
         email: '',
         password: ''
     });
-    const history = useHistory();
 
     function handleChange(e) {
         const {name, value} = e.target;
@@ -19,40 +17,8 @@ const Login = ({handleLoggedInChange, handleRegister}) => {
         if (!inputData.email || !inputData.password){
           return;
         };
-        authorize(inputData.password, inputData.email)
-        .then((data) => {
-                if (data.token === localStorage.getItem('jwt')) {
-                    history.push('/'); 
-                    handleLoggedInChange()
-                  }})
-        .catch(err => console.log(err)); 
+        onLogin(inputData.password, inputData.email)
     } 
-
-    const authorize = (password, email) => {
-        return fetch(`${BASE_URL}/signin`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({password, email})
-        })
-        .then((res) => {
-            try {
-                if (res.status === 200 || 201){
-                    localStorage.setItem('userEmail', inputData.email)
-                    return res.json();
-                }} 
-            catch(e){
-                handleRegister('error');
-                return (e)
-                }}
-            )
-        .then((data) => {
-            localStorage.setItem('jwt', data.token);
-            return data;
-        })
-        .catch(err => console.log(err))
-      };
 
     return (
         <form

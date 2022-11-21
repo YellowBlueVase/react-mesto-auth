@@ -1,7 +1,7 @@
 import "../index.css";
-import React from "react";
+import {useState, useEffect} from "react";
 import api from "../utils/api.js";
-import { BASE_URL } from "../utils/constants";
+import { checkToken, register, authorize } from "../utils/auth";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
@@ -18,14 +18,15 @@ import { Route, Switch, useHistory, withRouter } from 'react-router-dom';
 import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [registerStatus, setRegisterStatus] = React.useState({isOpen: false, status: '', title: ''});
-  const [selectedCard, setSelectedCard] = React.useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [authEmail, setAuthEmail] = useState('')
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [registerStatus, setRegisterStatus] = useState({isOpen: false, status: '', title: ''});
+  const [selectedCard, setSelectedCard] = useState(null);
   const history = useHistory();
 
   function handleCardClick(card) {
@@ -120,30 +121,48 @@ function App() {
     status === '' && setRegisterStatus({})
   }
 
-  const checkToken = (token) => {
-    return fetch(`${BASE_URL}/users/me`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+  function handleLogin(password, email) {
+    authorize(password, email)
+        .then((data) => {
+                if (data.token === localStorage.getItem('jwt')) {
+                    history.push('/'); 
+                    setAuthEmail(email);
+                    handleLoggedInChange()
+                  }})
+        .catch((err) => {
+            console.log(err);
+            handleRegisterStatus('error');
+        }); 
+  }
+
+  function handleRegister(password, email) {
+    register(password, email)
+    .then((res) => {
+      if (res) {
+        handleRegisterStatus('success');
+        history.push("/signin");
       }
     })
-    .then(res => res.json())
-    .then(data => data)
-  } 
+    .catch((err) => {
+        console.log(err);
+        handleRegisterStatus('error');
+    })
+  }
 
-  function handleTokenCheck(){
-    if (localStorage.getItem('jwt')){
+  function handleTokenCheck() {
     const jwt = localStorage.getItem('jwt');
-    checkToken(jwt).then((res) => {
-      if (res){
-        setLoggedIn({
-          loggedIn: true,
-        }, () => {
+    if (jwt){
+      checkToken(jwt)
+      .then((res) => {
+        if (res){
+          setLoggedIn({
+            loggedIn: true,
+          });
           history.push("/");
-        });
-      }
-    }); 
+        }}) 
+      .catch((err) => {
+        console.log(err);
+        handleRegisterStatus('error');})
   }}
 
   function closeAllPopups() {
@@ -165,7 +184,7 @@ function App() {
     selectedCard ||
     registerStatus.isOpen;
 
-  React.useEffect(() => {
+  useEffect(() => {
     function closeByEscape(evt) {
       if (evt.key === "Escape") {
         closeAllPopups();
@@ -180,7 +199,7 @@ function App() {
     }
   }, [isOpen]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getProfileInfo()
       .then((currentUser) => {
@@ -189,9 +208,6 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
-  React.useEffect(() => {
     api
       .getInitialCards()
       .then((initialCards) => {
@@ -200,9 +216,9 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [loggedIn]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleTokenCheck()
   }, []);
 
@@ -210,19 +226,16 @@ function App() {
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <Header 
-          userProfile={loggedIn && localStorage.getItem('userEmail')}
-          loggedIn={loggedIn}
+          userProfile={{authEmail, setAuthEmail}}
           setLoggedIn={setLoggedIn} />
         <Switch>
           <Route exact path="/signin">
             <Login 
-              handleLoggedInChange={handleLoggedInChange}
-              handleRegister={handleRegisterStatus} />
+              onLogin={handleLogin} />
           </Route>
           <Route exact path="/signup">
             <Register 
-              handleRegister={handleRegisterStatus}
-              onClose={closeAllPopups} />
+              onRegister={handleRegister}/>
           </Route>
           <ProtectedRoute 
             exact path="/"
