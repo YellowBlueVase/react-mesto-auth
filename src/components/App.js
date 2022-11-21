@@ -162,9 +162,15 @@ function App() {
           history.push("/");
         }}) 
       .catch((err) => {
-        console.log(err);
-        handleRegisterStatus('error');})
+        console.log(err);})
   }}
+
+  function handleSignOut(){
+    localStorage.removeItem('jwt');
+    setAuthEmail('');
+    history.push('/signin');
+    setLoggedIn(false)
+  }
 
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
@@ -201,7 +207,7 @@ function App() {
   }, [isOpen]);
 
   useEffect(() => {
-    api
+    loggedIn && api
       .getProfileInfo()
       .then((currentUser) => {
         setCurrentUser(currentUser);
@@ -209,7 +215,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-    api
+    loggedIn && api
       .getInitialCards()
       .then((initialCards) => {
         setCards(initialCards);
@@ -227,8 +233,8 @@ function App() {
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <Header 
-          userProfile={{authEmail, setAuthEmail}}
-          setLoggedIn={setLoggedIn} />
+          authEmail={authEmail}
+          onSignOut={handleSignOut} />
         <Switch>
           <Route exact path="/signin">
             <Login 

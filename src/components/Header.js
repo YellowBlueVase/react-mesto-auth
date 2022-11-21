@@ -1,14 +1,6 @@
-import {Link, Switch, useHistory, Route} from "react-router-dom";
+import {Link, Switch, Route} from "react-router-dom";
 
-function Header({ userProfile, setLoggedIn }) {
-  const history = useHistory();
-
-  function signOut(){
-    localStorage.removeItem('jwt');
-    userProfile.setAuthEmail('');
-    history.push('/signin');
-    setLoggedIn(false)
-  }
+function Header({ authEmail, onSignOut }) {
 
   return (
     <header className="header">
@@ -16,8 +8,8 @@ function Header({ userProfile, setLoggedIn }) {
       <div className="header__profile-box">
           <Switch>
             <Route exact path="/">
-              <div className="header__user-profile">{userProfile.authEmail}</div>
-              <button className='header__button header__button_gray' onClick={signOut}>Выйти</button>
+              <div className="header__user-profile">{authEmail}</div>
+              <button className='header__button header__button_gray' onClick={onSignOut}>Выйти</button>
             </Route>
             <Route exact path="/signup">
               <Link to="/signin" className='header__button header__button_white'>Войти</Link>
