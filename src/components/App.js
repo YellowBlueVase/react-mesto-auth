@@ -155,6 +155,7 @@ function App() {
       checkToken(jwt)
       .then((res) => {
         if (res){
+          setAuthEmail(res.data.email)
           setLoggedIn({
             loggedIn: true,
           });
